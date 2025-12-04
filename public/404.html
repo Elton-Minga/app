@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirigiendo...</title>
+  <script>
+    // Redirigir a index.html manteniendo la ruta
+    var path = window.location.pathname;
+    var base = '/app/';
+    
+    // Si la ruta no comienza con /app/, redirigir a /app/
+    if (!path.startsWith(base)) {
+      window.location.href = base;
+    } else {
+      // Si ya está dentro de /app/, cargar index.html
+      window.location.href = base + 'index.html' + window.location.search + window.location.hash;
+    }
+  </script>
+</head>
+<body>
+</body>
+</html>
