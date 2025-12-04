@@ -113,7 +113,7 @@ function DetalleReporte() {
               <span className="detalle-value">{detallesAdicionales.medioContacto}</span>
             </div>
             <div className="detalle-info-row">
-              <span className="detalle-label">Contacto del extorsionador</span>
+              <span className="detalle-label">Contacto Reportado</span>
               <span className="detalle-value">{detallesAdicionales.contacto}</span>
             </div>
             <div className="detalle-info-row">
