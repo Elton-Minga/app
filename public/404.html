@@ -3,29 +3,8 @@
 <head>
   <title>Redirigiendo...</title>
   <script>
-    // Obtener la ruta actual
-    var pathName = window.location.pathname;
-    var search = window.location.search;
-    var hash = window.location.hash;
-    
-    // Si accede a index.html, redirigir a /app/login
-    if (pathName.includes('index.html')) {
-      window.location.href = '/app/login' + search + hash;
-    }
-    // Si es solo /app/, redirigir a /app/login
-    else if (pathName === '/app/' || pathName === '/app') {
-      window.location.href = '/app/login' + search + hash;
-    }
-    // Para todas las otras rutas, cargar index.html pero mantener el hash para React Router
-    else {
-      // Guardar la ruta en sessionStorage para que React Router la procese
-      var route = pathName.replace(/^\/app\/?/, '');
-      if (route) {
-        window.location.href = '/app/#/' + route + search + hash;
-      } else {
-        window.location.href = '/app/login' + search + hash;
-      }
-    }
+    // Redirigir a la raíz /app/ para que React Router maneje las rutas
+    window.location.href = '/app/#/login';
   </script>
 </head>
 <body>

@@ -15,7 +15,7 @@ import './styles/App.css';
 
 function App() {
   return (
-    <HashRouter basename="/app">
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
