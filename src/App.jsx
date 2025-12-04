@@ -15,7 +15,7 @@ import './styles/App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/app">
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
