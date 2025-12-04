@@ -1,5 +1,5 @@
 // src/App.jsx
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import MisCuentas from './pages/MisCuentas';
 import TransferirCelular from './pages/TransferirCelular';
@@ -15,7 +15,7 @@ import './styles/App.css';
 
 function App() {
   return (
-    <BrowserRouter basename="/app">
+    <HashRouter basename="/app">
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
@@ -30,7 +30,7 @@ function App() {
         <Route path="/detalle-reporte" element={<DetalleReporte />} />
         <Route path="/detalle-movimiento" element={<DetalleMovimiento />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
