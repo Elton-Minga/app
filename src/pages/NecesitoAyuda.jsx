@@ -6,11 +6,10 @@ function NecesitoAyuda() {
   const monto = localStorage.getItem('montoTransferencia') || '0.00';
 
   const problemas = [
-    { texto: 'No llega el yapeo que envié', icono: '›' },
-    { texto: 'Me equivoqué al yapear', icono: '›' },
-    { texto: 'Cobraron mi yapeo más de una vez', icono: '›' },
-    { texto: 'No reconozco yapeo', icono: '›' },
-    { texto: 'Reportar extorsión', icono: '›', ruta: '/reportar-extorsion' }
+    { texto: 'No llega la transferencia que realicé', icono: '›' },
+    { texto: 'Me equivoqué al transferir', icono: '›' },
+    { texto: 'No reconozco la transferencia', icono: '›' },
+    { texto: 'Reportar fraude o extorsión', icono: '›', ruta: '/reportar-extorsion' }
   ];
 
   const handleOptionClick = (problema) => {

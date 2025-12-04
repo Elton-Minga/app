@@ -1,21 +1,83 @@
 // src/pages/MisCuentas.jsx
-import { useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
 function MisCuentas() {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [mostrarMovimientos, setMostrarMovimientos] = useState(false);
- // const navigate = useNavigate();
+  const [movimientos, setMovimientos] = useState([]);
+  const navigate = useNavigate();
+
   const usuario = localStorage.getItem('usuario') || 'Usuario';
   const saldo = localStorage.getItem('saldo') || '0.00';
 
-  const movimientos = [
-    { fecha: '02/12/2025', descripcion: 'Transferencia recibida', monto: '+150.00', tipo: 'ingreso' },
-    { fecha: '01/12/2025', descripcion: 'Pago de servicios', monto: '-45.50', tipo: 'egreso' },
-    { fecha: '30/11/2025', descripcion: 'Compra en comercio', monto: '-89.00', tipo: 'egreso' },
-    { fecha: '28/11/2025', descripcion: 'Depósito en efectivo', monto: '+500.00', tipo: 'ingreso' },
-  ];
+  // Cargar movimientos desde localStorage al montar el componente
+  useEffect(() => {
+    cargarMovimientos();
+  }, []);
+
+  const cargarMovimientos = () => {
+    // Movimientos predeterminados
+    const movimientosDefault = [
+      { 
+        fecha: '02/12/2025',
+        hora: '14:30:00',
+        descripcion: 'Transferencia recibida', 
+        monto: '+150.00', 
+        tipo: 'ingreso',
+        numeroOperacion: '0024561',
+        destinatario: 'María González',
+        comision: 'Gratis'
+      },
+      { 
+        fecha: '01/12/2025',
+        hora: '10:15:00',
+        descripcion: 'Pago de servicios', 
+        monto: '-45.50', 
+        tipo: 'egreso',
+        numeroOperacion: '0024560',
+        comision: 'S/ 2.00'
+      },
+      { 
+        fecha: '30/11/2025',
+        hora: '16:45:00',
+        descripcion: 'Compra en comercio', 
+        monto: '-89.00', 
+        tipo: 'egreso',
+        numeroOperacion: '0024559',
+        comision: 'Gratis'
+      },
+      { 
+        fecha: '28/11/2025',
+        hora: '09:20:00',
+        descripcion: 'Depósito en efectivo', 
+        monto: '+500.00', 
+        tipo: 'ingreso',
+        numeroOperacion: '0024558',
+        comision: 'Gratis'
+      },
+    ];
+
+    // Obtener movimientos guardados desde localStorage
+    const movimientosGuardados = JSON.parse(localStorage.getItem('movimientos') || '[]');
+
+    // Combinar movimientos guardados con los predeterminados
+    const todosMovimientos = [...movimientosGuardados, ...movimientosDefault];
+
+    // Ordenar por fecha (más recientes primero)
+    todosMovimientos.sort((a, b) => {
+      const fechaA = new Date(a.fecha.split('/').reverse().join('-'));
+      const fechaB = new Date(b.fecha.split('/').reverse().join('-'));
+      return fechaB - fechaA;
+    });
+
+    setMovimientos(todosMovimientos);
+  };
+
+  const handleClickMovimiento = (movimiento) => {
+    navigate('/detalle-movimiento', { state: { movimiento } });
+  };
 
   return (
     <div className="app-container">
@@ -49,7 +111,7 @@ function MisCuentas() {
 
         <div className="accounts-section">
           <h4>Mis cuentas en soles</h4>
-          
+
           <div className="account-card" onClick={() => setMostrarMovimientos(!mostrarMovimientos)}>
             <div className="account-info">
               <span className="account-type">Cuenta Ahorro</span>
@@ -66,19 +128,24 @@ function MisCuentas() {
             <div className="movimientos-lista">
               <h4>Movimientos recientes</h4>
               {movimientos.map((mov, index) => (
-                <div key={index} className={`movimiento-item ${mov.tipo}`}>
+                <div 
+                  key={index} 
+                  className={`movimiento-item ${mov.tipo}`}
+                  onClick={() => handleClickMovimiento(mov)}
+                >
                   <div className="mov-info">
                     <span className="mov-desc">{mov.descripcion}</span>
                     <span className="mov-fecha">{mov.fecha}</span>
                   </div>
-                  <span className="mov-monto">{mov.monto}</span>
+                  <div className="mov-monto-container">
+                    <span className="mov-monto">{mov.monto}</span>
+                    <span className="mov-arrow">›</span>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
-
-        
       </div>
     </div>
   );

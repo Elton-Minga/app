@@ -1,8 +1,11 @@
 // src/pages/TransferenciaExitosa.jsx
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 
 function TransferenciaExitosa() {
   const navigate = useNavigate();
+  const movimientoGuardado = useRef(false); // Flag para evitar duplicados
+
   const destinatario = localStorage.getItem('destinatario');
   const monto = localStorage.getItem('montoTransferencia');
   const entidad = localStorage.getItem('entidadDestino');
@@ -18,6 +21,61 @@ function TransferenciaExitosa() {
     minute: '2-digit',
     second: '2-digit'
   });
+
+  const numeroTransferencia = '000000000' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+  // Guardar movimiento en localStorage cuando se carga la pantalla (solo una vez)
+  useEffect(() => {
+    if (!movimientoGuardado.current) {
+      guardarMovimiento();
+      movimientoGuardado.current = true;
+    }
+  }, []);
+
+  const guardarMovimiento = () => {
+    // Crear objeto del movimiento
+    const nuevoMovimiento = {
+      id: Date.now(), // ID único basado en timestamp
+      fecha: new Date().toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }),
+      hora: new Date().toLocaleTimeString('es-PE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }),
+      descripcion: `Transferencia a ${destinatario}`,
+      monto: `-${parseFloat(monto).toFixed(2)}`,
+      tipo: 'egreso',
+      numeroOperacion: numeroOperacion,
+      destinatario: destinatario,
+      entidad: entidad,
+      celular: celular,
+      comision: 'Gratis',
+      numeroTransferencia: numeroTransferencia
+    };
+
+    // Obtener movimientos existentes
+    const movimientosExistentes = JSON.parse(localStorage.getItem('movimientos') || '[]');
+
+    // Verificar que no exista ya este movimiento (por ID único)
+    const yaExiste = movimientosExistentes.some(mov => mov.id === nuevoMovimiento.id);
+
+    if (!yaExiste) {
+      // Agregar el nuevo movimiento al inicio
+      movimientosExistentes.unshift(nuevoMovimiento);
+
+      // Guardar en localStorage
+      localStorage.setItem('movimientos', JSON.stringify(movimientosExistentes));
+
+      // Actualizar el saldo
+      const saldoActual = parseFloat(localStorage.getItem('saldo') || '0');
+      const nuevoSaldo = saldoActual - parseFloat(monto);
+      localStorage.setItem('saldo', nuevoSaldo.toFixed(2));
+    }
+  };
 
   const handleFinalizar = () => {
     navigate('/mis-cuentas');
@@ -39,7 +97,7 @@ function TransferenciaExitosa() {
 
       <div className="exitosa-container">
         <div className="success-icon">✓</div>
-        <h2>¡Gracias, Edder!</h2>
+        <h2>¡Gracias, {localStorage.getItem('usuario')}!</h2>
         <p className="success-message">La operación fue realizada con éxito</p>
 
         <div className="operacion-card">
@@ -79,7 +137,7 @@ function TransferenciaExitosa() {
             </div>
             <div className="detalle-row">
               <span className="label">Nro. transferencia:</span>
-              <span className="value">000000000240634</span>
+              <span className="value">{numeroTransferencia}</span>
             </div>
           </div>
         </div>

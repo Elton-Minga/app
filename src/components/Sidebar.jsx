@@ -33,6 +33,11 @@ function Sidebar({ isOpen, onClose, usuario }) {
             <span>Mis cuentas</span>
           </button>
 
+          <button onClick={() => handleNavigation('/mis-reportes')} className="nav-item">
+            <span className="nav-icon">📋</span>
+            <span>Mis reportes</span>
+          </button>
+
           <button className="nav-item">
             <span className="nav-icon">👤</span>
             <span>Actualización de datos</span>
