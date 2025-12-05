@@ -54,6 +54,44 @@ function ReportarExtorsion() {
     );
   };
 
+  // Generar ID único para el reporte
+  const generarIdReporte = () => {
+    const year = new Date().getFullYear();
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    return `RPT-${year}-${random}${timestamp.toString().slice(-3)}`;
+  };
+
+  // Guardar reporte en localStorage
+  const guardarReporte = () => {
+    const nuevoReporte = {
+      id: generarIdReporte(),
+      tipo: tipoIncidente === 'fraude' ? 'Fraude' : 'Extorsión',
+      fecha: fechaHecho,
+      hora: horaHecho,
+      estado: 'En revisión',
+      descripcion: descripcion.substring(0, 50) + (descripcion.length > 50 ? '...' : ''),
+      descripcionCompleta: descripcion,
+      compartirIdentidad: compartirIdentidad,
+      medioContacto: medioContacto,
+      contactoExtorsionador: contactoExtorsionador,
+      archivosAdjuntos: archivos.length,
+      fechaReporte: new Date().toISOString(),
+      tipoOriginal: tipoIncidente
+    };
+
+    // Obtener reportes existentes
+    const reportesExistentes = JSON.parse(localStorage.getItem('reportes') || '[]');
+
+    // Agregar el nuevo reporte al inicio
+    reportesExistentes.unshift(nuevoReporte);
+
+    // Guardar en localStorage
+    localStorage.setItem('reportes', JSON.stringify(reportesExistentes));
+
+    console.log('Reporte guardado:', nuevoReporte);
+  };
+
   // Enviar formulario
   const handleEnviar = () => {
     if (formularioValido()) {
@@ -64,13 +102,18 @@ function ReportarExtorsion() {
   };
 
   const confirmarEnvio = () => {
+    // Guardar el reporte
+    guardarReporte();
+
+    // Mostrar modal de éxito
     setMostrarModalAviso(false);
     setMostrarModalExito(true);
   };
 
   const finalizarReporte = () => {
     setMostrarModalExito(false);
-    navigate('/mis-cuentas');
+    // Navegar a Mis Reportes para ver el reporte recién creado
+    navigate('/mis-reportes');
   };
 
   return (

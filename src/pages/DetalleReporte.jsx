@@ -191,11 +191,7 @@ function DetalleReporte() {
           >
             Volver a mis reportes
           </button>
-          {reporte.estado !== 'Cerrado' && reporte.estado !== 'Resuelto' && (
-            <button className="btn-accion-primario">
-              Agregar información
-            </button>
-          )}
+          
         </div>
       </div>
     </div>

@@ -1,21 +1,23 @@
 // src/pages/MisReportes.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
 function MisReportes() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [reportes, setReportes] = useState([]);
   const navigate = useNavigate();
 
-  // Datos de ejemplo - en producción vendrían de una API
-  const reportes = [
+  // Reportes de ejemplo (predeterminados)
+  const reportesEjemplo = [
     {
       id: 'RPT-2025-001',
       tipo: 'Extorsión',
       fecha: '2025-12-01',
       hora: '14:30',
       estado: 'En revisión',
-      descripcion: 'Llamada amenazante solicitando dinero...'
+      descripcion: 'Llamada amenazante solicitando dinero...',
+      esEjemplo: true
     },
     {
       id: 'RPT-2025-002',
@@ -23,7 +25,8 @@ function MisReportes() {
       fecha: '2025-11-28',
       hora: '10:15',
       estado: 'Resuelto',
-      descripcion: 'Transacción no autorizada detectada...'
+      descripcion: 'Transacción no autorizada detectada...',
+      esEjemplo: true
     },
     {
       id: 'RPT-2025-003',
@@ -31,7 +34,8 @@ function MisReportes() {
       fecha: '2025-11-25',
       hora: '16:45',
       estado: 'En investigación',
-      descripcion: 'Mensaje de WhatsApp con amenazas...'
+      descripcion: 'Mensaje de WhatsApp con amenazas...',
+      esEjemplo: true
     },
     {
       id: 'RPT-2025-004',
@@ -39,9 +43,33 @@ function MisReportes() {
       fecha: '2025-11-20',
       hora: '09:20',
       estado: 'Cerrado',
-      descripcion: 'Intento de phishing por correo electrónico...'
+      descripcion: 'Intento de phishing por correo electrónico...',
+      esEjemplo: true
     }
   ];
+
+  // Cargar reportes al montar el componente
+  useEffect(() => {
+    cargarReportes();
+  }, []);
+
+  const cargarReportes = () => {
+    // Obtener reportes guardados en localStorage
+    const reportesGuardados = JSON.parse(localStorage.getItem('reportes') || '[]');
+
+    // Combinar reportes guardados con ejemplos
+    const todosReportes = [...reportesGuardados, ...reportesEjemplo];
+
+    // Ordenar por fecha de reporte (más recientes primero)
+    todosReportes.sort((a, b) => {
+      const fechaA = new Date(a.fechaReporte || a.fecha);
+      const fechaB = new Date(b.fechaReporte || b.fecha);
+      return fechaB - fechaA;
+    });
+
+    setReportes(todosReportes);
+    console.log('Reportes cargados:', todosReportes.length);
+  };
 
   const getEstadoColor = (estado) => {
     const colores = {
@@ -84,7 +112,7 @@ function MisReportes() {
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
-        usuario="Juan Pérez"
+        usuario={localStorage.getItem('usuario') || 'CIPRA SALINAS EDDER PIER'}
       />
 
       <div className="main-content reportes-content">
