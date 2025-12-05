@@ -19,7 +19,7 @@ body {
 /* ═══════════════════════════════════════════════════════════════ */
 
 .app-container {
-  width: 100%;
+  width: 60vh;
   max-width: 420px;
   height: 100vh;
   max-height: 900px;
