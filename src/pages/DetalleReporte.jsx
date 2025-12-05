@@ -65,9 +65,9 @@ function DetalleReporte() {
 
   // Datos adicionales simulados
   const detallesAdicionales = {
-    medioContacto: 'Teléfono',
-    contacto: '987654321',
-    compartirIdentidad: 'No',
+    medioContacto: reporte.medioContacto,
+    contacto: reporte.contactoExtorsionador,
+    compartirIdentidad: reporte.compartirIdentidad ? 'Sí' : 'No',
     fechaHecho: reporte.fecha,
     horaHecho: reporte.hora,
     archivosAdjuntos: [
