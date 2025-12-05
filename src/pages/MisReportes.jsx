@@ -95,6 +95,21 @@ function MisReportes() {
     return tipo === 'Fraude' ? '🚨' : '⚠️';
   };
 
+  // Función para formatear fecha correctamente (sin conversión de zona horaria)
+  const formatearFecha = (fechaStr) => {
+    // Si la fecha viene en formato YYYY-MM-DD
+    const [year, month, day] = fechaStr.split('-').map(Number);
+
+    // Crear fecha en zona horaria local
+    const fecha = new Date(year, month - 1, day);
+
+    return fecha.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
   const handleVerDetalle = (reporte) => {
     navigate('/detalle-reporte', { state: { reporte } });
   };
@@ -176,11 +191,7 @@ function MisReportes() {
                     <div className="reporte-info-item">
                       <span className="info-label">📅 Fecha</span>
                       <span className="info-value">
-                        {new Date(reporte.fecha).toLocaleDateString('es-ES', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: 'numeric'
-                        })}
+                        {formatearFecha(reporte.fecha)}
                       </span>
                     </div>
                     <div className="reporte-info-item">

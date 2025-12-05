@@ -36,6 +36,33 @@ function DetalleReporte() {
     return tipo === 'Fraude' ? '🚨' : '⚠️';
   };
 
+  // Función para formatear fecha correctamente (sin conversión de zona horaria)
+  const formatearFecha = (fechaStr) => {
+    // Si la fecha viene en formato YYYY-MM-DD
+    const [year, month, day] = fechaStr.split('-').map(Number);
+
+    // Crear fecha en zona horaria local
+    const fecha = new Date(year, month - 1, day);
+
+    return fecha.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  // Función para formatear fecha corta (para timeline)
+  const formatearFechaCorta = (fechaStr) => {
+    const [year, month, day] = fechaStr.split('-').map(Number);
+    const fecha = new Date(year, month - 1, day);
+
+    return fecha.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
   // Datos adicionales simulados
   const detallesAdicionales = {
     medioContacto: 'Teléfono',
@@ -97,11 +124,7 @@ function DetalleReporte() {
             <div className="detalle-info-row">
               <span className="detalle-label">Fecha del hecho</span>
               <span className="detalle-value">
-                {new Date(detallesAdicionales.fechaHecho).toLocaleDateString('es-ES', {
-                  day: '2-digit',
-                  month: 'long',
-                  year: 'numeric'
-                })}
+                {formatearFecha(detallesAdicionales.fechaHecho)}
               </span>
             </div>
             <div className="detalle-info-row">
@@ -162,11 +185,7 @@ function DetalleReporte() {
                 <div className="timeline-content">
                   <div className="timeline-evento">{evento.evento}</div>
                   <div className="timeline-fecha">
-                    {new Date(evento.fecha).toLocaleDateString('es-ES', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric'
-                    })} • {evento.hora}
+                    {formatearFechaCorta(evento.fecha)} • {evento.hora}
                   </div>
                 </div>
               </div>
@@ -191,7 +210,7 @@ function DetalleReporte() {
           >
             Volver a mis reportes
           </button>
-          
+
         </div>
       </div>
     </div>
